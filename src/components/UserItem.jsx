@@ -1,10 +1,10 @@
 import React from 'react'
 
-function UserItem() {
+function UserItem({name,avatar}) {
     return (
-        <div>
-            <img src="https://picsum.photos/200/300v" alt="" />
-            <p>username</p>
+        <div className="useritem_wrapper">
+            <img className="useritem_image" src={avatar} alt="" />
+            <p className="useritem_name">{name}</p>
         </div>
     )
 }
