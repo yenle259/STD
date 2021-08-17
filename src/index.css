@@ -16,6 +16,8 @@ code {
   display: flex;
   justify-content: flex-start;
   align-items: center;
+
+
 }
 .useritem_image{
   width: 52px;

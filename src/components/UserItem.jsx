@@ -1,12 +1,15 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
-function UserItem({name,avatar}) {
+function UserItem({id,name,avatar}) {
     return (
-        <div className="useritem_wrapper">
-            <img className="useritem_image" src={avatar} alt="" />
-            <p className="useritem_name">{name}</p>
-        </div>
-    )
+        <Link to={`/detail/${id}`}>
+            <div className="useritem_wrapper">
+                <img className="useritem_image" src={avatar} alt="" />
+                <p className="useritem_name">{name}</p>
+            </div>
+        </Link>
+    )    
 }
 
 export default UserItem
