@@ -2,12 +2,15 @@ import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom';
 import useUserById from '../hooks/useUserById';
 import useUserCreate from '../hooks/useUserCreate';
+import useUserUpdate from '../hooks/useUserUpdate';
 
 function UserForm() {
     const {id} =useParams();
     const [userData,userDataLoading,userDataSuccess,userDataError] = useUserById(id);
     const [formData, setFormData] = useState({});
-    const [createUser,{loading,success,error}]=useUserCreate();
+    const [createUser,{loading:cLoading,success:cSuccess,error:cError}]=useUserCreate();
+    const [updateUser,{loading:uLoading,success:uSuccess,error:uError}]=useUserUpdate();
+    
     const isUpdate = !!id;
     const isReady = !isUpdate || (userDataSuccess && userData);
     const handleChange = (field) =>(event)=>{
@@ -18,26 +21,40 @@ function UserForm() {
     };
     const handleSubmit = (event) =>{
         event.preventDefault();
-        createUser(formData);
+        if(isUpdate){
+            updateUser(id,formData);
+        }else{
+            createUser(formData); 
+        }
+         
     };
 
     useEffect(()=>{
-        if(success!=true)   return;
+        if(cSuccess!=true)   return;
         setFormData({});
-    },[success])
+    },[cSuccess])
 
     useEffect(()=>{
-        if(!isReady && !isUpdate)   return;
+        if(!isUpdate){
+            setFormData({});
+        } ;
+    },[id])
+
+    useEffect(()=>{
+        if(!isReady || !isUpdate)   return;
         const {name, avatar} = userData || {};
         setFormData({name, avatar});
     },[isReady])
 
     return (
         <div>
-                {loading && <em>Creating user...</em>}
-                {error && <em>An error occur, please try again</em>}
-                {success && <em>User is created</em>}
+                {cLoading && <em>Creating user...</em>}
+                {cError && <em>An error occur, please try again</em>}
+                {cSuccess && <em>User is created</em>}
 
+                {uLoading && <em>updating user...</em>}
+                {uError && <em>An update error occur, please try again</em>}
+                {uSuccess && <em>User is updated</em>}
 
                 {!isReady && userDataLoading && <em>Loading data...</em>}
                 {!isReady && userDataError && <em>Cannot load data</em>}
@@ -63,7 +80,7 @@ function UserForm() {
                             placeholder="Your Avatar URL" />
 
                     </div>
-                    <button disabled={loading} type="submit" >Submit </button>
+                    <button disabled={uLoading} type="submit" >Submit </button>
                 
                 </form>
                 }

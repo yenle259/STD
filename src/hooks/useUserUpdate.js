@@ -6,13 +6,16 @@ function useUserUpdate() {
   const [error, setError] = useState(false);
   const [result, setResult] = useState();
 
-  const update = (newUser) => {
+  const update = (id,newUser) => {
     setLoading(true);
-    fetch("https://61176b1c30022f0017a05dfa.mockapi.io/api/v1/users", {
+    fetch(`https://61176b1c30022f0017a05dfa.mockapi.io/api/v1/users/${id}`, {
       method: "put",
       body: JSON.stringify(newUser),
     })
-      .then((res) => res.json())
+      .then((res) => {
+          if(res.ok) return res.json();
+          throw new ErrorEvent('request failed');
+      })
       .then((json) => {
         setResult(json);
         setSuccess(true);
