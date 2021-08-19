@@ -9,6 +9,7 @@ import {
   Link
 } from "react-router-dom";
 import UserDetail from './components/UserDetail';
+import UserForm from './components/UserForm';
 
 function App() {
   return (
@@ -19,16 +20,23 @@ function App() {
             <li>
               <Link to="/">Home</Link>
             </li>
+            <li>
+              <Link to="/create">New User</Link>
+            </li>
           </ul>
         </nav>
 
         <Switch>
-          <Route path="/detail/:id">
+          <Route path="/create">
+            <UserForm/>
+          </Route>
+          <Route path="/about/:id">
             <UserDetail/>
           </Route>
           <Route path="/">
             <UserList/>
           </Route>
+          
         </Switch>
       </div>
     </Router>
