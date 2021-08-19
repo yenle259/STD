@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import useUserCreate from '../hooks/useUserCreate';
 
 function UserForm() {
     const [formData, setFormData] = useState({});
-
+    const [createUser,{loading,success,error}]=useUserCreate();
     const handleChange = (field) =>(event)=>{
         setFormData(prev => ({
             ...prev,
@@ -11,10 +12,19 @@ function UserForm() {
     };
     const handleSubmit = (event) =>{
         event.preventDefault();
-        console.log(formData);
+        createUser(formData);
     };
+
+    useEffect(()=>{
+        if(success!=true)   return;
+        setFormData({});
+    },[success])
+
     return (
         <div>
+                {loading && <em>Creating user...</em>}
+                {error && <em>An error occur, please try again</em>}
+                {success && <em>User is created</em>}
             <form onSubmit={handleSubmit}>
                 <div>
                     <label htmlFor="" >User Name</label>
@@ -28,7 +38,7 @@ function UserForm() {
                 <div>
                     <label htmlFor="" >User Avatar</label>
                     <input 
-                        value={formData["avatar"]}
+                        value={formData["avatar"] || ""}
                         onChange={handleChange("avatar")}
                         type="text" 
                         name="user_avatar" 
@@ -36,7 +46,7 @@ function UserForm() {
                         placeholder="Your Avatar URL" />
 
                 </div>
-                <button type="submit" >Submit </button>
+                <button disabled={loading} type="submit" >Submit </button>
                
             </form>
         </div>
