@@ -7,6 +7,7 @@ function useUserById(id) {
     const [data, setData] = useState();
 
     useEffect(() => {
+        if(!id) return;
         setLoading(true);
         fetch(`https://61176b1c30022f0017a05dfa.mockapi.io/api/v1/users/${id}`)
             .then(res=>res.json())
