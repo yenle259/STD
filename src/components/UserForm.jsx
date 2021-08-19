@@ -26,6 +26,12 @@ function UserForm() {
         setFormData({});
     },[success])
 
+    useEffect(()=>{
+        if(!isReady && !isUpdate)   return;
+        const {name, avatar} = userData || {};
+        setFormData({name, avatar});
+    },[isReady])
+
     return (
         <div>
                 {loading && <em>Creating user...</em>}
@@ -35,7 +41,7 @@ function UserForm() {
 
                 {!isReady && userDataLoading && <em>Loading data...</em>}
                 {!isReady && userDataError && <em>Cannot load data</em>}
-                {!isReady && !userData && <em>Data is empty</em>}
+                {!isReady && userDataSuccess && !userData && <em>Data is empty</em>}
                 {isReady && <form onSubmit={handleSubmit}>
                     <div>
                         <label htmlFor="" >User Name</label>
